@@ -19,7 +19,7 @@ const createMeal = async (req: Request, res: Response) => {
 
 const getMeal = async (req: Request, res: Response) => {
   try {
-    const result = await mealService.getMeal(req.body);
+    const result = await mealService.getMeal();
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({
@@ -29,7 +29,37 @@ const getMeal = async (req: Request, res: Response) => {
   }
 };
 
+const updateMeal = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const result = await mealService.updateMeal(req.body, id as string);
+    res.status(200).json({
+      success: true,
+      message: "Status updated!",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+const deleteMeal = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const result = await mealService.deleteMeal(id as string);
+    res.status(200).json({
+      success: true,
+      message: "Deleted meal!",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: "Delete failed." });
+  }
+};
+
 export const mealController = {
   createMeal,
   getMeal,
+  updateMeal,
+  deleteMeal,
 };
