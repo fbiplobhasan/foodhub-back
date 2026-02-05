@@ -29,6 +29,20 @@ const getMeal = async (req: Request, res: Response) => {
   }
 };
 
+const getSingleMeal = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const result = await mealService.getSingleMeal(id as string);
+    res.status(200).json({
+      success: true,
+      message: "Meal fetched successfully!",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Fetch failed." });
+  }
+};
+
 const updateMeal = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -62,4 +76,5 @@ export const mealController = {
   getMeal,
   updateMeal,
   deleteMeal,
+  getSingleMeal,
 };

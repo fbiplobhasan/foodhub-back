@@ -1,25 +1,18 @@
 import { prisma } from "../../lib/prisma";
 
 const createMeal = async (mealData: any) => {
-  try {
-    const result = await prisma.meal.create({
-      data: {
-        name: mealData.name,
-        description: mealData.description,
-        price: Number(mealData.price),
-        image: mealData.image,
-        dietaryType: mealData.dietaryType,
-        categoryId: mealData.categoryId,
-        providerId: mealData.providerId,
-      },
-    });
-    return result;
-  } catch (error: any) {
-    console.log("Error in createMeal service:", error);
-    throw new Error(
-      error.message || "Something went wrong while creating meal.",
-    );
-  }
+  const result = await prisma.meal.create({
+    data: {
+      name: mealData.name,
+      description: mealData.description,
+      price: Number(mealData.price),
+      image: mealData.image,
+      dietaryType: mealData.dietaryType,
+      categoryId: mealData.categoryId,
+      providerId: mealData.providerId,
+    },
+  });
+  return result;
 };
 
 const getMeal = async () => {
@@ -27,6 +20,18 @@ const getMeal = async () => {
     include: {
       category: true,
       provider: true,
+    },
+  });
+  return result;
+};
+
+const getSingleMeal = async (mealId: any) => {
+  const result = await prisma.meal.findUnique({
+    where: { id: mealId },
+    include: {
+      category: true,
+      provider: true,
+      reviews: true,
     },
   });
   return result;
@@ -52,4 +57,5 @@ export const mealService = {
   getMeal,
   updateMeal,
   deleteMeal,
+  getSingleMeal,
 };
